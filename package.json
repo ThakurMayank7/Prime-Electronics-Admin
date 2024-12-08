@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^7.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^11.0.2",
+    "firebase-admin": "^13.0.1",
     "lucide-react": "^0.468.0",
     "next": "15.0.4",
     "react": "^19.0.0",
