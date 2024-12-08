@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link";
+import { signOutUser } from "@/firebase/auth";
 
 
 
@@ -33,16 +34,9 @@ export default function Home() {
     return <p>loading...</p>;
   }
 
-
-
-  // const handleSignOut = () => {signOutUser()};
-
   return (
-    // <div>
-    //   {user?.displayName}
-    //   <button className="bg-red-600 rounded p-2 border-2 border-black" onClick={handleSignOut}>Sign Out</button>
-    // </div>
-    <div className="flex flex-col justify-center items-center h-screen gap-2">
+    
+    <div className="flex flex-col justify-center items-center gap-2">
       <span className="text-4xl font-bold">Choose Action</span>
 
       <div className="flex gap-2 justify-center mx-10">
@@ -111,23 +105,57 @@ export default function Home() {
 </div>
 
 
-
+<div>
+  <span className="text-lg">Customize here</span>
+</div>
 
 
       <div>
       <Card>
   <CardHeader>
-    <CardTitle>Edit Banner</CardTitle>
+    <CardTitle>Edit Best Deals</CardTitle>
     <CardDescription>Select this option if you want to edit the banner of home page</CardDescription>
   </CardHeader>
   <CardContent>
-    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/watch">Go to Edit Banner</Link>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/watch">Go to Best Deals</Link>
   
   </CardContent>
   
 </Card>
 
       </div>
+
+      <Card>
+  <CardHeader>
+    <CardTitle>Edit Displayed Categories</CardTitle>
+    <CardDescription>Select this option if you want to edit the banner of home page</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/watch">Go to Displayed Categories</Link>
+  
+  </CardContent>
+  
+</Card>
+
+      <div>
+      <Card>
+  <CardHeader>
+    <CardTitle>Edit Featured Brands</CardTitle>
+    <CardDescription>Select this option if you want to edit the banner of home page</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/watch">Go to Featured Brands</Link>
+  
+  </CardContent>
+  
+</Card>
+
+      </div>
+
+
+      <button className="bg-red-600 p-2 rounded text-white hover:bg-red-700" onClick={()=>signOutUser()}>Sign Out</button>
+
+
     </div>
   );
 }

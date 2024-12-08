@@ -16,6 +16,10 @@ function ItemsAdd() {
     addItem(title,description,category,brand);
 
 
+    setTitle("");
+    setDescription("");
+    setCategory("");
+    setBrand("");
 
   };
 
@@ -30,7 +34,7 @@ function ItemsAdd() {
           <span className="font-semibold mr-2 w-1/2 text-center">Title</span>
           <input
             className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" onChange={(e)=>setTitle(e.target.value)}
+            type="text" value={title} onChange={(e)=>setTitle(e.target.value)}
           />
         </div>
         <div className="flex flex-row items-center justify-center">
@@ -39,21 +43,21 @@ function ItemsAdd() {
           </span>
           <input
             className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" onChange={(e)=>setDescription(e.target.value)}
+            type="text" value={description} onChange={(e)=>setDescription(e.target.value)}
           />
         </div>
         <div className="flex flex-row items-center justify-center">
           <span className="font-semibold mr-2 w-1/2 text-center">Category</span>
           <input
             className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" onChange={(e)=>setCategory(e.target.value)}
+            type="text" value={category} onChange={(e)=>setCategory(e.target.value)}
           />
         </div>
         <div className="flex flex-row items-center justify-center">
           <span className="font-semibold mr-2 w-1/2 text-center">Brand</span>
           <input
             className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" onChange={(e)=>setBrand(e.target.value)}
+            type="text" value={brand} onChange={(e)=>setBrand(e.target.value)}
           />
         </div>
 
