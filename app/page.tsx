@@ -77,6 +77,13 @@ export default function Home() {
 
 
 
+
+
+
+      </div>
+
+
+<div className="flex gap-2">
 <Card>
   <CardHeader>
     <CardTitle>Add a Brand</CardTitle>
@@ -101,7 +108,24 @@ export default function Home() {
   </CardContent>
   
 </Card>
+</div>
 
+
+
+
+
+      <div>
+      <Card>
+  <CardHeader>
+    <CardTitle>Edit Banner</CardTitle>
+    <CardDescription>Select this option if you want to edit the banner of home page</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/watch">Go to Edit Banner</Link>
+  
+  </CardContent>
+  
+</Card>
 
       </div>
     </div>
