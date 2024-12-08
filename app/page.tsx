@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import Link from "next/link";
 
 
 
@@ -57,7 +58,7 @@ export default function Home() {
   </CardHeader>
   <CardContent>
     
-    <button className="bg-cyan-900 text-white p-2 rounded">Add</button>
+  <Link className="bg-cyan-900 text-white p-2 rounded" href="/items/add">Add</Link>
   </CardContent>
   
 </Card>
@@ -69,7 +70,7 @@ export default function Home() {
     <CardDescription>View all the current items</CardDescription>
   </CardHeader>
   <CardContent>
-  <button className="bg-cyan-900 text-white p-2 rounded">View</button>
+  <Link className="bg-cyan-900 text-white p-2 rounded" href="/items/watch">View</Link>
   </CardContent>
   
 </Card>
@@ -82,7 +83,8 @@ export default function Home() {
     <CardDescription>Add a new brand using this option</CardDescription>
   </CardHeader>
   <CardContent>
-  <button className="bg-cyan-900 text-white p-2 rounded">Add</button>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/add">Add</Link>
+  
   </CardContent>
   
 </Card>
@@ -94,7 +96,8 @@ export default function Home() {
     <CardDescription>View all the current brands using this option</CardDescription>
   </CardHeader>
   <CardContent>
-  <button className="bg-cyan-900 text-white p-2 rounded">View</button>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/brands/watch">View</Link>
+  
   </CardContent>
   
 </Card>
