@@ -1,16 +1,45 @@
 'use client';
 
+import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react'
+
+import React, { useEffect } from 'react'
 
 function Header() {
 
     const pathname=usePathname();
 
-    if(pathname=="/")
+
+    const { user, loading } = useAuth();
+
+  
+    useEffect(() => {
+      if (user !== null && loading === false) {
+        
+      }
+    }, [user,loading]);
+
+
+
+    if(pathname==="/login")
     {
-        return null;
+      return null;
+    }
+
+
+
+    if(pathname=="/" && user!==null)
+    {
+        return (
+          <div className='text-center '>
+            
+        <span className='text-2xl font-semibold'>Welcome {user.displayName}</span>
+         <br />
+         <hr />
+         <br />
+          </div>
+        );
     }
 
   return (

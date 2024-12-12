@@ -113,7 +113,7 @@ function Login() {
           </div>
           <button
             className="text-xs p-1 rounded-full border-2 border-black hover:p-2 hover:bg-gray-300 bg-gray-100 w-fit flex flex-row items-center justify-center"
-            onClick={() => signInWithGoogle()}
+            onClick={() => setVerified(false)}
           >
             Use any Other Email
             <ArrowRight />
