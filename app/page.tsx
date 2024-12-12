@@ -113,6 +113,20 @@ export default function Home() {
       <div>
       <Card>
   <CardHeader>
+    <CardTitle>Edit Banners</CardTitle>
+    <CardDescription>Select this option if you want to edit the banner of home page</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Link className="bg-cyan-900 text-white p-2 rounded" href="/banner/new-banner">Add New Banner</Link>
+  
+  </CardContent>
+  
+</Card>
+
+      </div>
+      <div>
+      <Card>
+  <CardHeader>
     <CardTitle>Edit Best Deals</CardTitle>
     <CardDescription>Select this option if you want to edit the banner of home page</CardDescription>
   </CardHeader>
