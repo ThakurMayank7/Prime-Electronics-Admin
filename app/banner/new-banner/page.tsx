@@ -22,16 +22,8 @@ function AddBanner() {
 
   const router = useRouter();
 
-
-  const [colorLeftPanel,setColorLeftPanel]=useState<string>("cyan-400");
-  const [colorRightPanel,setColorRightPanel]=useState<string>("red-300");
-  
-
-
-
-
-
-
+  const [colorLeftPanel, setColorLeftPanel] = useState<string>("cyan-400");
+  const [colorRightPanel, setColorRightPanel] = useState<string>("red-300");
 
   useEffect(() => {
     if (user === null && loading === false) {
@@ -43,20 +35,12 @@ function AddBanner() {
     return <p>loading...</p>;
   }
 
-
-
-  
-
-
-  const changeLeftPanelColor=(color:string)=>{
+  const changeLeftPanelColor = (color: string) => {
     setColorLeftPanel(color);
-  }
-  const changeRightPanelColor=(color:string)=>{
+  };
+  const changeRightPanelColor = (color: string) => {
     setColorRightPanel(color);
-  }
-
-
-
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -64,7 +48,11 @@ function AddBanner() {
         className="w-[1400px] h-[500px] flex flex-row"
         // style={{ backgroundImage: `url(${url})` }}  add later
       >
-        <div className={`w-2/3 bg-${colorLeftPanel} h-full flex flex-col`}>
+        <div
+          className={`w-2/3 bg-${
+            colorLeftPanel ? `${colorLeftPanel}` : "gray-500"
+          } h-full flex flex-col`}
+        >
           <div className="flex items-center justify-center">
             <span className="text-white font-semibold text-8xl">
               50% OFF!!!
@@ -95,7 +83,9 @@ function AddBanner() {
           </div>
         </div>
 
-        <div className={`w-1/3 bg-${colorRightPanel} h-full flex items-center justify-center`}>
+        <div
+          className={`w-1/3 bg-${colorRightPanel} h-full flex items-center justify-center`}
+        >
           <Card className="w-1/2">
             <CardHeader>
               <CardTitle>DSLR Camera</CardTitle>
@@ -122,38 +112,19 @@ function AddBanner() {
 
       <div className="w-full p-10">
         <div className="border-2 border-black rounded p-2">
-
-            <div
-            className="flex"
-            >
-
-                <div className="w-1/2 border-2 border-black p-2">
-                <div>
-                    <span>Left Panel Color</span>
-                    <ComboBox datas={colors} valueChange={changeLeftPanelColor}/>
-  
-                </div>
-                </div>
-                <div className="w-1/2 border-2 border-black p-2">
-                <div>
-                    <span>Right Panel Color</span>
-                </div>
-                </div>
-
-
-{colorLeftPanel}
-
+          <div className="flex">
+            <div className="w-1/2 border-2 border-black p-2">
+              <div>
+                <span>Left Panel Color</span>
+                <ComboBox datas={colors} valueChange={changeLeftPanelColor} />
+              </div>
             </div>
-
-
-
-
-
-
-
-
-
-
+            <div className="w-1/2 border-2 border-black p-2">
+              <div>
+                <span>Right Panel Color</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

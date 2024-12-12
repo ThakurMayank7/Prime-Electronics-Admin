@@ -1,11 +1,23 @@
 import type { Config } from "tailwindcss";
 
 export default {
+	mode: 'jit',
+	safelist: [
+		// Safelist all background colors using regular expression
+		{
+			pattern: /^bg-(red|blue|green|yellow|purple|pink|indigo|gray|teal|cyan|amber|lime|fuchsia|rose|violet|slate|neutral|zinc|stone|orange|emerald|indigo|lavender|mint|ruby|warmGray|lightBlue)-\d{3}$/,
+		  },
+		  // Safelist all text colors
+		  {
+			pattern: /^text-(red|blue|green|yellow|purple|pink|indigo|gray|teal|cyan|amber|lime|fuchsia|rose|violet|slate|neutral|zinc|stone|orange|emerald|indigo|lavender|mint|ruby|warmGray|lightBlue)-\d{3}$/,
+		  },
+	  ],
     darkMode: ["class"],
     content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+	'./lib/**/*.{js,ts,jsx,tsx}', 
   ],
   theme: {
   	extend: {
