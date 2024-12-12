@@ -1,119 +1,102 @@
-'use client'
+"use client";
 
-import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import { useAuth } from "@/hooks/useAuth";
+import { CldImage } from "next-cloudinary";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
+import { SquareArrowUpRight } from "lucide-react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 function AddBanner() {
+  const { user, loading } = useAuth();
 
-    const { user, loading } = useAuth();
-    
-    const router = useRouter();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (user === null && loading === false) {
+      router.push("/login");
+    }
+  }, [user, router, loading]);
 
-
-
-    const [title, setTitle] = useState<string>("");
-      const [description, setDescription] = useState<string>("");
-      const [category, setCategory] = useState<string>("");
-      const [brand, setBrand] = useState<string>("");
-    
-
-
-
-      
-      useEffect(() => {
-        if (user === null && loading === false) {
-          router.push("/login");
-        }
-      }, [user, router, loading]);
-    
-      if (loading) {
-        return <p>loading...</p>;
-      }
-
-
-      
-        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
-      
-
-
-
-
-
-          setTitle("");
-          setDescription("");
-          setCategory("");
-          setBrand("");
-      
-        };
-
-
-
-
-
-
-
-
-
-
-
+  if (loading) {
+    return <p>loading...</p>;
+  }
 
   return (
-    <div className='flex items-center justify-center h-full'>
-
-
-
-<form
-        className="flex flex-col gap-2 border-2 border-black p-4"
-        onSubmit={handleSubmit}
+    <div className="flex flex-col items-center">
+      <div
+        className="w-[1400px] h-[500px] flex flex-row"
+        // style={{ backgroundImage: `url(${url})` }}  add later
       >
-        <h1 className="text-center text-4xl font-bold p-2">Item Details</h1>
-        <div className="flex flex-row items-center justify-center">
-          <span className="font-semibold mr-2 w-1/2 text-center">Title</span>
-          <input
-            className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" value={title} onChange={(e)=>setTitle(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          <span className="font-semibold mr-2 w-1/2 text-center">
-            Description
-          </span>
-          <input
-            className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" value={description} onChange={(e)=>setDescription(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          <span className="font-semibold mr-2 w-1/2 text-center">Category</span>
-          <input
-            className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" value={category} onChange={(e)=>setCategory(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          <span className="font-semibold mr-2 w-1/2 text-center">Brand</span>
-          <input
-            className="bg-gray-200 border-2 border-black rounded p-2"
-            type="text" value={brand} onChange={(e)=>setBrand(e.target.value)}
-          />
+        <div className="w-2/3 bg-cyan-400 h-full flex flex-col">
+          <div className="flex items-center justify-center">
+            <span className="text-white font-semibold text-8xl">
+              50% OFF!!!
+            </span>
+          </div>
+          <br />
+          <div className="flex flex-col items-center">
+            <span className="text-blue-950 font-semibold text-6xl font-serif">
+              DSLR Camera
+            </span>
+            <span className="text-sm mt-2 font-medium">
+              Professional-grade DSLR camera with 24.2 MP resolution and 4K
+              video recording capabilities.
+            </span>
+          </div>
+
+          <div className="flex items-center flex-col my-auto">
+            <span className="text-6xl text-indigo-900 font-semibold font-mono">
+              Dont miss out on this deal!
+            </span>
+          </div>
+
+          <div className="flex mt-auto">
+            <button className="ml-40 mb-20 text-2xl bg-black p-2 rounded text-white flex items-center gap-2 ">
+              Buy Now
+              <SquareArrowUpRight />
+            </button>
+          </div>
         </div>
 
-        <br />
-        <button
-          className="bg-green-500 hover:bg-green-600 rounded p-2 border-2 border-black font-bold"
-          type="submit"
-        >
-          Add Item
-        </button>
-      </form>
+        <div className="w-1/3 bg-red-300 h-full flex items-center justify-center">
+          <Card className="w-1/2">
+            <CardHeader>
+              <CardTitle>DSLR Camera</CardTitle>
+              <CardDescription className="break-words w-fit">
+                Professional-grade DSLR camera with 24.2 MP resolution and 4K
+                video recording capabilities.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CldImage
+                src="cld-sample-2" // Use this sample image or upload your own via the Media Explorer
+                width="200" // Transform the image: auto-crop to square aspect_ratio
+                height="200"
+                alt="banner"
+                crop={{
+                  type: "auto",
+                  source: true,
+                }}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
-
-
+      <div className="w-full p-10">
+        <div className="border-2 border-black rounded p-2"></div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default AddBanner
+export default AddBanner;
