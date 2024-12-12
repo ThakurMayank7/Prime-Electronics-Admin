@@ -14,6 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ComboBox from "@/components/ChooseComboBox";
+import { colors } from "@/lib/constants";
 
 function AddBanner() {
   const { user, loading } = useAuth();
@@ -23,7 +25,7 @@ function AddBanner() {
 
   const [colorLeftPanel,setColorLeftPanel]=useState<string>("cyan-400");
   const [colorRightPanel,setColorRightPanel]=useState<string>("red-300");
-
+  
 
 
 
@@ -40,6 +42,21 @@ function AddBanner() {
   if (loading) {
     return <p>loading...</p>;
   }
+
+
+
+  
+
+
+  const changeLeftPanelColor=(color:string)=>{
+    setColorLeftPanel(color);
+  }
+  const changeRightPanelColor=(color:string)=>{
+    setColorRightPanel(color);
+  }
+
+
+
 
   return (
     <div className="flex flex-col items-center">
@@ -113,6 +130,8 @@ function AddBanner() {
                 <div className="w-1/2 border-2 border-black p-2">
                 <div>
                     <span>Left Panel Color</span>
+                    <ComboBox datas={colors} valueChange={changeLeftPanelColor}/>
+  
                 </div>
                 </div>
                 <div className="w-1/2 border-2 border-black p-2">
@@ -122,6 +141,7 @@ function AddBanner() {
                 </div>
 
 
+{colorLeftPanel}
 
             </div>
 
