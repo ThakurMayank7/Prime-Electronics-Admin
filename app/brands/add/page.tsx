@@ -112,7 +112,7 @@ function BrandsAdd() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("folder", "primeElectronics/rendering");
+      formData.append("folder", "primeElectronics/draft");
 
       const response = await fetch("/api/add-image", {
         method: "POST",
