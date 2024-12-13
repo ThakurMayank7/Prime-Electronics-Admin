@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ComboBox from "@/components/ChooseComboBox";
-import { booleanValues, colors } from "@/lib/constants";
+import {  booleanValues, colors } from "@/lib/constants";
 import { Separator } from "@/components/ui/separator";
 
 function AddBanner() {
@@ -30,11 +30,11 @@ function AddBanner() {
 
   const [isTitlePresent,setTitlePresent] = useState<string>("false");
 
-  const [bannerTitle,setBannerTitle] = useState<string>("DSLR Camera");
+  const [bannerTitle,setBannerTitle] = useState<string>("");
 
   const [bannerDescription,setBannerDescription] = useState<string>("")
 
-  const [isBannerDescriptionPresent,setBannerDescriptionPresent] = useState<boolean>(true);
+  const [isBannerDescriptionPresent,setBannerDescriptionPresent] = useState<string>("true");
 
 
   useEffect(() => {
@@ -58,6 +58,9 @@ function AddBanner() {
   };
   const changeTitlePresence = (value: string) => {
     setTitlePresent(value);
+  };
+  const changeBannerDescriptionPresence = (value: string) => {
+    setBannerDescriptionPresent(value);
   };
 
   return (
@@ -93,10 +96,24 @@ function AddBanner() {
             </span>
             )
             }
-            <span className="text-sm mt-2 font-medium">
+
+
+
+            {/* Description */}
+            {isBannerDescriptionPresent==="none"?<></>:
+            
+            (isBannerDescriptionPresent==="false"?
+            
+              <span className="text-sm mt-2 font-medium">
               Professional-grade DSLR camera with 24.2 MP resolution and 4K
               video recording capabilities.
             </span>
+                          :
+                          <span className="text-sm mt-2 font-medium">
+                          {bannerDescription}
+                        </span>
+                        )
+                        }
           </div>
 
           <div className="flex items-center flex-col my-auto">
@@ -174,7 +191,7 @@ function AddBanner() {
   <div className="w-1/2 flex flex-row justify-center items-center">
   <span>Text</span>
   <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
-  <input className="border-2 border-black rounded p-1" type="text" value={highlightedText} onChange={(e)=>setHighlightedText(e.target.value)}/>
+  <input placeholder="Enter Highlighted Text" className="border-2 border-black rounded p-1" type="text" value={highlightedText} onChange={(e)=>setHighlightedText(e.target.value)}/>
   </div>
   <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
   <div className="w-1/2 flex flex-row justify-center items-center">
@@ -213,7 +230,7 @@ function AddBanner() {
   <div className="w-1/2 flex flex-row justify-center items-center">
   <span>Text</span>
   <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
-  <input className="border-2 border-black rounded p-1" type="text" value={bannerTitle} onChange={(e)=>setBannerTitle(e.target.value)}/>
+  <input placeholder="Enter Title" className="border-2 border-black rounded p-1" type="text" value={bannerTitle} onChange={(e)=>setBannerTitle(e.target.value)}/>
   </div>
   <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
   <div className="w-1/2 flex flex-row justify-center items-center">
@@ -234,11 +251,11 @@ function AddBanner() {
             <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
 
 
-            <ComboBox defaultValue="Default" datas={booleanValues} valueChange={changeTitlePresence} />
+            <ComboBox defaultValue="Default" datas={booleanValues} valueChange={changeBannerDescriptionPresence} />
             </div>
 
 {
-  isBannerDescriptionPresent &&
+  isBannerDescriptionPresent==="true" &&
 <>
           
             <Separator className="bg-black my-1"/>
@@ -247,7 +264,7 @@ function AddBanner() {
   <div className="w-1/2 flex flex-row justify-center items-center">
   <span>Text</span>
   <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
-  <input className="border-2 border-black rounded p-1" type="text" value={bannerTitle} onChange={(e)=>setBannerTitle(e.target.value)}/>
+  <input placeholder="Enter Description" className="border-2 border-black rounded p-1" type="text" value={bannerDescription} onChange={(e)=>setBannerDescription(e.target.value)}/>
   </div>
   <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
   <div className="w-1/2 flex flex-row justify-center items-center">

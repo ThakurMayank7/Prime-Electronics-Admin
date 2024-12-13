@@ -2,8 +2,11 @@ export const booleanValues=[
 {value:"true",label:"Custom"},
 {value:"false",label:"Default"},
 {value:"none",label:"None"},
+]
 
-
+export const booleanDefaultValues=[
+  {value:"true",label:"Custom"},
+  {value:"false",label:"None"},
 ]
 
 export const colors = [
