@@ -28,4 +28,33 @@ export async function verifyAdmin(email: string): Promise<boolean> {
       return false; // Handle error and return false
     }
   }
+
+  export async function createBrand(brandName: string,brandDescription: string,logoRef:string): Promise<boolean> {
+  
+  try{
+
+    const result=await adminDb.collection('brands').add(
+      {
+        brandName: brandName,
+        brandDescription:brandDescription,
+        logoRef:logoRef
+      }
+    );
+      if(!result.id)
+      {
+        return false;
+      }
+      return true;
+
+
+
+  }
+  catch(error)
+  {
+    console.error('error');
+    return false;
+  }
+  
+  
+  }
   

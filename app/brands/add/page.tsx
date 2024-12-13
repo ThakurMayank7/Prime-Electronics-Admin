@@ -1,5 +1,6 @@
 "use client";
 
+import { createBrand } from "@/actions/actions";
 import Spinner from "@/components/BlocksSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import { CldImage } from "next-cloudinary";
@@ -13,10 +14,6 @@ function BrandsAdd() {
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-
-  const [isLogoSelected, setIsLogoSelected] = useState<boolean>(false);
-
-  const [logoId, setLogoId] = useState<string>("");
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -42,7 +39,19 @@ function BrandsAdd() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // addItem(title,description);
+
+
+    if(!publicId)
+    {
+      setError('no file input');
+      return null;
+    }
+
+    const result=createBrand(title,description,"lref");
+    
+
+
+
 
     setTitle("");
     setDescription("");
@@ -96,9 +105,9 @@ function BrandsAdd() {
         className="flex flex-col gap-2 border-2 border-black p-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-center text-4xl font-bold p-2">Item Details</h1>
+        <h1 className="text-center text-4xl font-bold p-2 font-serif">Brand Details</h1>
         <div className="flex flex-row items-center justify-center">
-          <span className="font-semibold mr-2 w-1/2 text-center">Name</span>
+          <span className="font-semibold mr-2 w-1/2 text-center">Brand Name</span>
           <input
             className="bg-gray-200 border-2 border-black rounded p-2"
             type="text"
@@ -123,13 +132,17 @@ function BrandsAdd() {
           className="bg-green-500 hover:bg-green-600 rounded p-2 border-2 border-black font-bold"
           type="submit"
         >
-          Add Item
+          Create Brand
         </button>
       </form>
       <div className="border-2 border-black p-4">
-        <span className="text-center text-2xl font-semibold">
-          {isLogoSelected ? "Preview of Logo" : "Select a Logo"}
+        <div className="flex justify-center">
+        <span className="text-2xl font-semibold">
+          {publicId ? "Preview of Logo" : "Select a Logo"}
         </span>
+        </div>
+
+        {!publicId && 
         <div>
           <input
             type="file"
@@ -138,15 +151,16 @@ function BrandsAdd() {
             onChange={handleFileChange}
             className="mb-4"
           />
-          <button onClick={handleUpload}>Upload Image</button>
           <button
             onClick={handleUpload}
             disabled={uploading}
             className="bg-teal-200 p-2 rounded hover:bg-teal-500"
-          >
+            >
             {uploading ? "Uploading..." : "Upload"}
           </button>
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
+          }
         {publicId && (
           <div className="bg-cyan-400">
             <CldImage
@@ -160,7 +174,6 @@ function BrandsAdd() {
           </div>
         )}
       </div>
-      {error}
     </div>
   );
 }
