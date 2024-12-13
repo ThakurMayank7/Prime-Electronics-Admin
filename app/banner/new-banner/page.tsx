@@ -17,6 +17,7 @@ import {
 import ComboBox from "@/components/ChooseComboBox";
 import {  booleanDefaultValues, booleanValues, colors } from "@/lib/constants";
 import { Separator } from "@/components/ui/separator";
+import Spinner from "@/components/BlocksSpinner";
 
 function AddBanner() {
   const { user, loading } = useAuth();
@@ -46,7 +47,7 @@ function AddBanner() {
   }, [user, router, loading]);
 
   if (loading) {
-    return <p>loading...</p>;
+    return <div className="h-screen w-screen flex items-center justify-center"><Spinner/></div>;
   }
 
   const changeLeftPanelColor = (color: string) => {

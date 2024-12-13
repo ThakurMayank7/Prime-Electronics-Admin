@@ -17,6 +17,11 @@ function Header() {
     }
   }, [user, loading]);
 
+  if(loading)
+  {
+    return null;
+  }
+
   if (pathname === "/login") {
     return null;
   }

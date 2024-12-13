@@ -18,15 +18,23 @@ function BrandsAdd() {
   const [file, setFile] = useState<File | null>(null);
 
   const [uploading, setUploading] = useState(false);
-
+  
   const [publicId, setPublicId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  
+  const [finalId,setFinalId] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
+  
   useEffect(() => {
     if (user === null && loading === false) {
       router.push("/login");
     }
-  }, [user, router, loading]);
+
+    if(finalId && creating ===false)
+    {
+      router.push('/')
+    }
+  }, [user, router, loading,finalId,creating]);
 
   if (loading) {
     return (
@@ -36,7 +44,7 @@ function BrandsAdd() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
 
@@ -46,15 +54,48 @@ function BrandsAdd() {
       setError('no file input');
       return null;
     }
+    if (!file) {
+      setError("Please select a file first.");
+      return;
+    }
+    try {
+      setCreating(true)
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "primeElectronics/brands");
 
-    const result=createBrand(title,description,"lref");
-    
+      const response = await fetch("/api/add-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(errorData);
+        return;
+      }
+
+      const data = await response.json();
+      setFinalId(data.publicId);
 
 
 
+      const result=await createBrand(title,description,data.publicId);
+      if(result===true)
+      {
 
-    setTitle("");
-    setDescription("");
+
+        // TODO display a new brand is created
+  
+      }
+
+
+
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setCreating(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +117,7 @@ function BrandsAdd() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("folder", "yourDynamicFolderName");
+      formData.append("folder", "primeElectronics/rendering");
 
       const response = await fetch("/api/add-image", {
         method: "POST",
