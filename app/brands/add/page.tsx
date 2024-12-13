@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { CldImage } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 function BrandsAdd() {
   const { user, loading } = useAuth();
@@ -18,23 +20,22 @@ function BrandsAdd() {
   const [file, setFile] = useState<File | null>(null);
 
   const [uploading, setUploading] = useState(false);
-  
+
   const [publicId, setPublicId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  
-  const [finalId,setFinalId] = useState<string | null>(null);
+
+  const [finalId, setFinalId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
-  
+
   useEffect(() => {
     if (user === null && loading === false) {
       router.push("/login");
     }
 
-    if(finalId && creating ===false)
-    {
-      router.push('/')
+    if (finalId && creating === false) {
+      router.push("/");
     }
-  }, [user, router, loading,finalId,creating]);
+  }, [user, router, loading, finalId, creating]);
 
   if (loading) {
     return (
@@ -44,14 +45,11 @@ function BrandsAdd() {
     );
   }
 
-  const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-
-
-    if(!publicId)
-    {
-      setError('no file input');
+    if (!publicId) {
+      setError("no file input");
       return null;
     }
     if (!file) {
@@ -59,7 +57,7 @@ function BrandsAdd() {
       return;
     }
     try {
-      setCreating(true)
+      setCreating(true);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("folder", "primeElectronics/brands");
@@ -78,19 +76,16 @@ function BrandsAdd() {
       const data = await response.json();
       setFinalId(data.publicId);
 
-
-
-      const result=await createBrand(title,description,data.publicId);
-      if(result===true)
-      {
-
+      const result = await createBrand(title, description, data.publicId);
+      if (result === true) {
+        const now = new Date();
 
         // TODO display a new brand is created
-  
+        toast("A new Brand has been created", {
+          description: "At " + format(now.toISOString(), "yyyy-MM-dd HH:mm:ss"),
+          action: null,
+        });
       }
-
-
-
     } catch (err) {
       console.log(err);
     } finally {
@@ -146,9 +141,13 @@ function BrandsAdd() {
         className="flex flex-col gap-2 border-2 border-black p-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-center text-4xl font-bold p-2 font-serif">Brand Details</h1>
+        <h1 className="text-center text-4xl font-bold p-2 font-serif">
+          Brand Details
+        </h1>
         <div className="flex flex-row items-center justify-center">
-          <span className="font-semibold mr-2 w-1/2 text-center">Brand Name</span>
+          <span className="font-semibold mr-2 w-1/2 text-center">
+            Brand Name
+          </span>
           <input
             className="bg-gray-200 border-2 border-black rounded p-2"
             type="text"
@@ -178,30 +177,30 @@ function BrandsAdd() {
       </form>
       <div className="border-2 border-black p-4">
         <div className="flex justify-center">
-        <span className="text-2xl font-semibold">
-          {publicId ? "Preview of Logo" : "Select a Logo"}
-        </span>
+          <span className="text-2xl font-semibold">
+            {publicId ? "Preview of Logo" : "Select a Logo"}
+          </span>
         </div>
 
-        {!publicId && 
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            multiple={false} // Disallow multiple file selection
-            onChange={handleFileChange}
-            className="mb-4"
-          />
-          <button
-            onClick={handleUpload}
-            disabled={uploading}
-            className="bg-teal-200 p-2 rounded hover:bg-teal-500"
+        {!publicId && (
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              multiple={false} // Disallow multiple file selection
+              onChange={handleFileChange}
+              className="mb-4"
+            />
+            <button
+              onClick={handleUpload}
+              disabled={uploading}
+              className="bg-teal-200 p-2 rounded hover:bg-teal-500"
             >
-            {uploading ? "Uploading..." : "Upload"}
-          </button>
-          {error && <p className="text-red-500 mt-4">{error}</p>}
-        </div>
-          }
+              {uploading ? "Uploading..." : "Upload"}
+            </button>
+            {error && <p className="text-red-500 mt-4">{error}</p>}
+          </div>
+        )}
         {publicId && (
           <div className="bg-cyan-400">
             <CldImage
