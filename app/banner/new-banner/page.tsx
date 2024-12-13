@@ -168,6 +168,7 @@ function AddBanner() {
 
 
 
+{/* TODO Feature items */}
           <div className="flex flex-col border-2 border-black p-2">
             <div className="flex items-center">
 
@@ -175,7 +176,7 @@ function AddBanner() {
             <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
 
 
-            <ComboBox defaultValue="Feature a Item here" datas={booleanDefaultValues} valueChange={changeBannerDescriptionPresence} />
+            <ComboBox defaultValue="Feature a Item here" datas={booleanDefaultValues} valueChange={changeItemFeatured} />
             </div>
 
 {
