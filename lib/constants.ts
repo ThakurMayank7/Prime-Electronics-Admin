@@ -1,3 +1,11 @@
+export const booleanValues=[
+{value:"true",label:"Custom"},
+{value:"false",label:"Default"},
+{value:"none",label:"None"},
+
+
+]
+
 export const colors = [
   // Red shades
   { value: "red-50", label: "Red-50" },

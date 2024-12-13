@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 type ComboBoxProps = {
+  defaultValue:string;
   datas: {
     value: string;
     label: string;
@@ -28,7 +29,7 @@ type ComboBoxProps = {
   valueChange: (color: string) => void;
 };
 
-function ComboBox({ datas, valueChange }: ComboBoxProps) {
+function ComboBox({defaultValue, datas, valueChange}: ComboBoxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -44,7 +45,7 @@ function ComboBox({ datas, valueChange }: ComboBoxProps) {
           >
             {value
               ? datas.find((data) => data.value === value)?.label
-              : "Select data..."}
+              : defaultValue}
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -58,7 +59,7 @@ function ComboBox({ datas, valueChange }: ComboBoxProps) {
                   <CommandItem
                     key={data.value}
                     value={data.value}
-                    onSelect={(currentValue) => {
+                    onSelect={(currentValue:string) => {
                       setValue(currentValue === value ? "" : currentValue);
                       valueChange(currentValue === value ? "" : currentValue);
                       setOpen(false);

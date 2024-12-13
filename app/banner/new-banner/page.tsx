@@ -15,7 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ComboBox from "@/components/ChooseComboBox";
-import { colors } from "@/lib/constants";
+import { booleanValues, colors } from "@/lib/constants";
+import { Separator } from "@/components/ui/separator";
 
 function AddBanner() {
   const { user, loading } = useAuth();
@@ -24,6 +25,17 @@ function AddBanner() {
 
   const [colorLeftPanel, setColorLeftPanel] = useState<string>("cyan-400");
   const [colorRightPanel, setColorRightPanel] = useState<string>("red-300");
+  const [highlightedText,setHighlightedText] = useState<string>("50% OFF!!!");
+  const [highlightedTextColor,setHighlightedTextColor] = useState<string>("white");
+
+  const [isTitlePresent,setTitlePresent] = useState<string>("false");
+
+  const [bannerTitle,setBannerTitle] = useState<string>("DSLR Camera");
+
+  const [bannerDescription,setBannerDescription] = useState<string>("")
+
+  const [isBannerDescriptionPresent,setBannerDescriptionPresent] = useState<boolean>(true);
+
 
   useEffect(() => {
     if (user === null && loading === false) {
@@ -41,6 +53,12 @@ function AddBanner() {
   const changeRightPanelColor = (color: string) => {
     setColorRightPanel(color);
   };
+  const changeHighlightedTextColor = (color: string) => {
+    setHighlightedTextColor(color);
+  };
+  const changeTitlePresence = (value: string) => {
+    setTitlePresent(value);
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -54,15 +72,27 @@ function AddBanner() {
           } h-full flex flex-col`}
         >
           <div className="flex items-center justify-center">
-            <span className="text-white font-semibold text-8xl">
-              50% OFF!!!
+            {/* Highlighted Text */}
+            <span className={`text-${highlightedTextColor} font-semibold text-8xl`}>
+              {highlightedText}
             </span>
           </div>
           <br />
           <div className="flex flex-col items-center">
-            <span className="text-blue-950 font-semibold text-6xl font-serif">
+
+            {isTitlePresent==="none"?<></>:
+            
+(isTitlePresent==="false"?
+
+  <span className="text-blue-950 font-semibold text-6xl font-serif">
               DSLR Camera
             </span>
+              :
+  <span className="text-blue-950 font-semibold text-6xl font-serif">
+              {bannerTitle}
+            </span>
+            )
+            }
             <span className="text-sm mt-2 font-medium">
               Professional-grade DSLR camera with 24.2 MP resolution and 4K
               video recording capabilities.
@@ -111,20 +141,178 @@ function AddBanner() {
       </div>
 
       <div className="w-full p-10">
+
         <div className="border-2 border-black rounded p-2">
-          <div className="flex">
-            <div className="w-1/2 border-2 border-black p-2">
-              <div>
+
+
+          <div className="flex border-2 border-black items-center">
+            <div className="w-1/2 p-2">
+              <div className="flex flex-row items-center justify-center">
                 <span>Left Panel Color</span>
-                <ComboBox datas={colors} valueChange={changeLeftPanelColor} />
+                <Separator className="bg-black mx-2 h-6" orientation="vertical" />
+                <ComboBox defaultValue="Choose Color"  datas={colors} valueChange={changeLeftPanelColor} />
               </div>
             </div>
-            <div className="w-1/2 border-2 border-black p-2">
-              <div>
+            <Separator className="bg-black mx-2 h-10" orientation="vertical" />
+            <div className="w-1/2 p-2">
+              <div className="flex flex-row items-center justify-center">
                 <span>Right Panel Color</span>
+                <Separator className="bg-black mx-2 h-6" orientation="vertical" />
+                <ComboBox defaultValue="Choose Color"  datas={colors} valueChange={changeRightPanelColor} />
               </div>
             </div>
           </div>
+
+
+          
+<br />
+          <div className="flex flex-col border-2 border-black p-2">
+            <span className="text-xl">Highlighted Text</span>
+            <Separator className="bg-black my-1"/>
+<div className="flex flex-row items-center">
+
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Text</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <input className="border-2 border-black rounded p-1" type="text" value={highlightedText} onChange={(e)=>setHighlightedText(e.target.value)}/>
+  </div>
+  <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Highlighted Text Color</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <ComboBox defaultValue="Choose Color" datas={colors} valueChange={changeHighlightedTextColor} />
+  </div>
+</div>
+          </div>
+
+
+
+
+
+
+
+
+<br />
+          <div className="flex flex-col border-2 border-black p-2">
+            <div className="flex items-center">
+
+            <span className="text-xl">Title</span>
+            <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+
+
+            <ComboBox defaultValue="Default" datas={booleanValues} valueChange={changeTitlePresence} />
+            </div>
+
+{
+  isTitlePresent==='true' &&
+<>
+          
+            <Separator className="bg-black my-1"/>
+<div className="flex flex-row items-center">
+
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Text</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <input className="border-2 border-black rounded p-1" type="text" value={bannerTitle} onChange={(e)=>setBannerTitle(e.target.value)}/>
+  </div>
+  <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Highlighted Text Color</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <ComboBox defaultValue="Choose Color" datas={colors} valueChange={changeHighlightedTextColor} />
+  </div>
+</div>
+</>
+
+}
+</div>
+<br />
+          <div className="flex flex-col border-2 border-black p-2">
+            <div className="flex items-center">
+
+            <span className="text-xl">Description</span>
+            <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+
+
+            <ComboBox defaultValue="Default" datas={booleanValues} valueChange={changeTitlePresence} />
+            </div>
+
+{
+  isBannerDescriptionPresent &&
+<>
+          
+            <Separator className="bg-black my-1"/>
+<div className="flex flex-row items-center">
+
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Text</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <input className="border-2 border-black rounded p-1" type="text" value={bannerTitle} onChange={(e)=>setBannerTitle(e.target.value)}/>
+  </div>
+  <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Highlighted Text Color</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <ComboBox defaultValue="Choose Color" datas={colors} valueChange={changeHighlightedTextColor} />
+  </div>
+</div>
+</>
+
+}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+<br />
+          <div className="flex border-2 border-black items-center">
+asfdd
+          </div>
+
+
+
+
+
+
+
+
+
+
         </div>
       </div>
     </div>
