@@ -1,9 +1,16 @@
 "use client";
 
+import Spinner from "@/components/BlocksSpinner";
+import { useAuth } from "@/hooks/useAuth";
 import { CldImage } from "next-cloudinary";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 function BrandsAdd() {
+  const { user, loading } = useAuth();
+
+  const router = useRouter();
+
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
@@ -17,6 +24,20 @@ function BrandsAdd() {
 
   const [publicId, setPublicId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user === null && loading === false) {
+      router.push("/login");
+    }
+  }, [user, router, loading]);
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
