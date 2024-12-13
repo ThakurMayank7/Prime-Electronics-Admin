@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ComboBox from "@/components/ChooseComboBox";
-import {  booleanValues, colors } from "@/lib/constants";
+import {  booleanDefaultValues, booleanValues, colors } from "@/lib/constants";
 import { Separator } from "@/components/ui/separator";
 
 function AddBanner() {
@@ -35,6 +35,8 @@ function AddBanner() {
   const [bannerDescription,setBannerDescription] = useState<string>("")
 
   const [isBannerDescriptionPresent,setBannerDescriptionPresent] = useState<string>("true");
+
+  const [isItemFeatured,setItemFeatured] = useState<string>("false");
 
 
   useEffect(() => {
@@ -61,6 +63,9 @@ function AddBanner() {
   };
   const changeBannerDescriptionPresence = (value: string) => {
     setBannerDescriptionPresent(value);
+  };
+  const changeItemFeatured = (value: string) => {
+    setItemFeatured(value);
   };
 
   return (
@@ -159,7 +164,53 @@ function AddBanner() {
 
       <div className="w-full p-10">
 
-        <div className="border-2 border-black rounded p-2">
+            <div className="border-2 border-black rounded p-2">
+
+
+
+          <div className="flex flex-col border-2 border-black p-2">
+            <div className="flex items-center">
+
+            <span className="text-xl">Description</span>
+            <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+
+
+            <ComboBox defaultValue="Feature a Item here" datas={booleanDefaultValues} valueChange={changeBannerDescriptionPresence} />
+            </div>
+
+{
+  isItemFeatured==="true" &&
+<>
+          
+            <Separator className="bg-black my-1"/>
+<div className="flex flex-row items-center">
+
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Text</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <input placeholder="Enter Description" className="border-2 border-black rounded p-1" type="text" value={bannerDescription} onChange={(e)=>setBannerDescription(e.target.value)}/>
+  </div>
+  <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Highlighted Text Color</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <ComboBox defaultValue="Choose Color" datas={colors} valueChange={changeHighlightedTextColor} />
+  </div>
+</div>
+</>
+
+}
+</div>
+
+
+
+
+
+
+
+
+
+<br />
 
 
           <div className="flex border-2 border-black items-center">
