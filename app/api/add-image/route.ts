@@ -37,7 +37,7 @@ export async function POST(request:NextRequest)
         const result=await new Promise<CloudinaryUploadResult>(
             (resolve,reject) =>{
                 const uploadStream=cloudinary.uploader.upload_stream(
-                    {folder:"nextDemoCloudinary"},
+                    {folder:"primeElectronicsDev"},
                     (error,result) =>{
                         if(error) reject(error);
                         else resolve(result as CloudinaryUploadResult);
