@@ -20,6 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import Spinner from "@/components/BlocksSpinner";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { createBanner } from "@/actions/actions";
 
 type itemDetails = {
   itemId: string;
@@ -38,6 +39,12 @@ function AddBanner() {
   const [highlightedText, setHighlightedText] = useState<string>("50% OFF!!!");
   const [highlightedTextColor, setHighlightedTextColor] =
     useState<string>("white");
+  const [titleColor, setTitleColor] =
+    useState<string>("blue-950");
+  const [descriptionColor, setDescriptionColor] =
+    useState<string>("black");
+  const [secondaryHighlightedTextColor, setSecondaryHighlightedTextColor] =
+    useState<string>("indigo-900");
 
   const [isTitlePresent, setTitlePresent] = useState<string>("false");
 
@@ -58,7 +65,7 @@ function AddBanner() {
   const [isItemFeatured, setItemFeatured] = useState<string>("false");
   const [items, setItems] = useState<{ value: string; label: string }[]>([]);
 
-  const [itemDetails, setItemDetails] = useState<itemDetails>();
+  const [itemDetails, setItemDetails] = useState<itemDetails>({itemId:"",itemDescription:"",itemDisplayImageId:"",itemName:""});
 
   const [isButtonPresent, setButtonPresent] = useState<string>("true");
 
@@ -141,6 +148,15 @@ function AddBanner() {
   const changeHighlightedTextColor = (color: string) => {
     setHighlightedTextColor(color);
   };
+  const changeTitleColor = (color: string) => {
+    setTitleColor(color);
+  };
+  const changeDescriptionColor = (color: string) => {
+    setDescriptionColor(color);
+  };
+  const changeSecondaryHighlightedColor = (color: string) => {
+    setSecondaryHighlightedTextColor(color);
+  };
   const changeTitlePresence = (value: string) => {
     setTitlePresent(value);
   };
@@ -174,8 +190,64 @@ function AddBanner() {
     setButtonPresent(value);
   };
 
-  const handleCreateBanner = () => {
+  const handleCreateBanner = async () => {
     setCreating(true);
+
+    try{
+
+      type bannerData={
+        bannerTitle:string;
+        bannerTitleColor:string;
+        bannerDescription:string;
+        bannerDescriptionColor:string;
+        bannerHighlightedText:string;
+        bannerHighlightedTextColor:string;
+        bannerSecondaryHighlightedText:string;
+        bannerSecondaryHighlightedTextColor:string;
+        isItemFeatured:string;
+        leftPanelColor:string;
+        rightPanelColor:string;
+        // currently this button only contains two options true if item featured or false if no button
+        isNavigationButton:string;
+        presence:{
+          button:boolean,
+          isItemFeatured:boolean,
+
+          isHighlightedPresent:boolean,
+          isSecondaryHighlightedPresent:boolean,
+          isDescriptionPresent:boolean,
+          isTitlePresent:boolean,
+        }
+        itemFeaturedId:string;
+      }
+
+
+      const bannerDetails:bannerData={
+        bannerTitle:bannerTitle,
+
+        bannerTitleColor:titleColor,
+        bannerDescription:bannerDescription,
+        bannerDescriptionColor:descriptionColor,
+        bannerHighlightedText:highlightedText,
+        bannerHighlightedTextColor:highlightedTextColor,
+        bannerSecondaryHighlightedText:bannerSecondaryHighlighted,
+        bannerSecondaryHighlightedTextColor:secondaryHighlightedTextColor,
+
+      }
+
+      const result=await createBanner(
+        {
+          
+        }
+      )
+
+
+
+      // TODO make a sonner toast
+      router.push('/');
+
+    }
+    catch(e) {console.error(e);setCreating(false);}
   };
 
   return (
@@ -220,11 +292,11 @@ function AddBanner() {
                 {isTitlePresent === "none" ? (
                   <></>
                 ) : isTitlePresent === "false" ? (
-                  <span className="text-blue-950 font-semibold text-6xl font-serif">
-                    DSLR Camera
+                  <span className={`text-${titleColor} font-semibold text-6xl font-serif`}>
+                    {itemDetails?.itemName}
                   </span>
                 ) : (
-                  <span className="text-blue-950 font-semibold text-6xl font-serif">
+                  <span className={`text-${titleColor} font-semibold text-6xl font-serif`}>
                     {bannerTitle}
                   </span>
                 )}
@@ -233,12 +305,11 @@ function AddBanner() {
                 {isBannerDescriptionPresent === "none" ? (
                   <></>
                 ) : isBannerDescriptionPresent === "false" ? (
-                  <span className="text-sm mt-2 font-medium">
-                    Professional-grade DSLR camera with 24.2 MP resolution and
-                    4K video recording capabilities.
+                  <span className={`text-${descriptionColor} text-sm mt-2 font-medium`}>
+                    {itemDetails?.itemDescription}
                   </span>
                 ) : (
-                  <span className="text-sm mt-2 font-medium">
+                  <span className={`text-${descriptionColor} text-sm mt-2 font-medium`}>
                     {bannerDescription}
                   </span>
                 )}
@@ -249,23 +320,30 @@ function AddBanner() {
                 <></>
               ) : isBannerSecondaryHighlightedPresent === "false" ? (
                 <div className="flex items-center flex-col my-auto">
-                  <span className="text-6xl text-indigo-900 font-semibold font-mono">
+                  <span className={`text-6xl text-${secondaryHighlightedTextColor} font-semibold font-mono`}>
                     Dont miss out on this deal!
                   </span>
                 </div>
               ) : (
                 <div className="flex items-center flex-col my-auto">
-                  <span className="text-6xl text-indigo-900 font-semibold font-mono">
+                  <span className={`text-6xl text-${secondaryHighlightedTextColor} font-semibold font-mono`}>
                     {bannerSecondaryHighlighted}
                   </span>
                 </div>
               )}
+
+              {isButtonPresent==="none"?
+              
+              
+              <></>
+              :
               <div className="flex mt-auto">
                 <button className="ml-40 mb-20 text-2xl bg-black p-2 rounded text-white flex items-center gap-2 ">
                   Buy Now
                   <SquareArrowUpRight />
                 </button>
               </div>
+                }
             </div>
 
             {!(isItemFeatured === "false" || isItemFeatured === "") && (
@@ -274,15 +352,14 @@ function AddBanner() {
               >
                 <Card className="w-1/2">
                   <CardHeader>
-                    <CardTitle>DSLR Camera</CardTitle>
+                    <CardTitle>{itemDetails.itemName}</CardTitle>
                     <CardDescription className="break-words w-fit">
-                      Professional-grade DSLR camera with 24.2 MP resolution and
-                      4K video recording capabilities.
+                      {itemDetails?.itemDescription}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <CldImage
-                      src="primeElectronics/items/displayImages/roxrhksadevnwc1quzly" // Use this sample image or upload your own via the Media Explorer
+                      src={itemDetails?.itemDisplayImageId||"samples/balloons"} // Use this sample image or upload your own via the Media Explorer
                       width="200" // Transform the image: auto-crop to square aspect_ratio
                       height="200"
                       alt="banner"
@@ -438,7 +515,7 @@ function AddBanner() {
                         <ComboBox
                           defaultValue="Choose Color"
                           datas={colors}
-                          valueChange={changeHighlightedTextColor}
+                          valueChange={changeTitleColor}
                         />
                       </div>
                     </div>
@@ -492,7 +569,7 @@ function AddBanner() {
                         <ComboBox
                           defaultValue="Choose Color"
                           datas={colors}
-                          valueChange={changeHighlightedTextColor}
+                          valueChange={changeDescriptionColor}
                         />
                       </div>
                     </div>
@@ -542,7 +619,7 @@ function AddBanner() {
                         className="bg-black mx-1 h-10"
                       />
                       <div className="w-1/2 flex flex-row justify-center items-center">
-                        <span>Highlighted Text Color</span>
+                        <span>Text Color</span>
                         <Separator
                           orientation="vertical"
                           className="bg-black mx-2 h-6"
@@ -550,7 +627,7 @@ function AddBanner() {
                         <ComboBox
                           defaultValue="Choose Color"
                           datas={colors}
-                          valueChange={changeHighlightedTextColor}
+                          valueChange={changeSecondaryHighlightedColor}
                         />
                       </div>
                     </div>
@@ -588,6 +665,7 @@ function AddBanner() {
           </div>
         </div>
       )}
+      {isButtonPresent}
     </>
   );
 }
