@@ -35,7 +35,9 @@ function ItemsAdd() {
   const [imagesId, setImagesId] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState<boolean>(false);
 
-const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>([]);
+  const [brandsData, setBrandsData] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   useEffect(() => {
     if (user === null && loading === false) {
@@ -43,34 +45,25 @@ const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>
     }
   }, [user, router, loading]);
 
-  useEffect(
-    ()=>{
-      try{
+  useEffect(() => {
+    try {
+      const fetchBrandsData = async () => {
+        const snap = await getDoc(doc(db, "data", "brands"));
 
-        const fetchBrandsData=async()=>{
-
-          const snap=await getDoc(doc(db,'data','brands'));
-
-          if(snap.exists())
-          {
-            const data=snap.data();
-            const transformedArray = Object.keys(data).map((field) => ({
-              value: field,      // The field name becomes the `value`
-              label: data[field] // The field value becomes the `label`
-            }));
-            setBrandsData(transformedArray);
-          }
-
-
-
-
-
+        if (snap.exists()) {
+          const data = snap.data();
+          const transformedArray = Object.keys(data).map((field) => ({
+            value: field,
+            label: data[field],
+          }));
+          setBrandsData(transformedArray);
         }
-        fetchBrandsData();
-      }
-      catch(error){console.error(error)}
+      };
+      fetchBrandsData();
+    } catch (error) {
+      console.error(error);
     }
-  ,[])
+  }, []);
 
   if (loading) {
     return (
@@ -142,8 +135,8 @@ const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>
         const result = await createItem({
           itemName: title,
           itemDescription: description,
-          itemBrandId:brand,
-          itemCategory:category,
+          itemBrandId: brand,
+          itemCategory: category,
           displayImageRef: finalId,
           imagesRefs: finalImagesId,
         });
@@ -269,10 +262,9 @@ const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>
     }
   };
 
-  const changeBrand=(value:string)=>{
-
+  const changeBrand = (value: string) => {
     setBrand(value);
-  }
+  };
 
   return (
     <div>
@@ -330,7 +322,11 @@ const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>
                 <span className="font-semibold mr-2 w-1/2 text-center">
                   Brand
                 </span>
-                <ComboBox defaultValue="Choose a brand" datas={brandsData} valueChange={changeBrand} />
+                <ComboBox
+                  defaultValue="Choose a brand"
+                  datas={brandsData}
+                  valueChange={changeBrand}
+                />
               </div>
 
               <br />
@@ -393,23 +389,22 @@ const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>
                 onChange={handleImageChange}
               />
 
-
               <button
                 onClick={handleImagesUpload}
                 className={`mx-10 p-2 rounded ${
                   !uploadingImages
-                  ? "bg-teal-200 hover:bg-teal-500"
-                  : "bg-teal-700"
-                  }`}
-                  disabled={uploadingImages}
-                  >
+                    ? "bg-teal-200 hover:bg-teal-500"
+                    : "bg-teal-700"
+                }`}
+                disabled={uploadingImages}
+              >
                 {uploadingImages ? "Uploading" : "Upload Selected Images"}
               </button>
 
-                <span className="ml-20">Selected Images : {images.length}</span>
-              {imagesId.length!==0 && (
+              <span className="ml-20">Selected Images : {images.length}</span>
+              {imagesId.length !== 0 && (
                 <>
-                <Separator className="my-2 bg-black"/>
+                  <Separator className="my-2 bg-black" />
                   <div className="grid grid-cols-3 gap-4 bg-gray-200 p-1">
                     {imagesId.map((imageId) => (
                       <div key={imageId} className="border-black border-2">
