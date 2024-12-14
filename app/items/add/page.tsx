@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { createItem } from "@/actions/actions";
+import { Separator } from "@/components/ui/separator";
 
 function ItemsAdd() {
   const { user, loading } = useAuth();
@@ -350,7 +351,7 @@ function ItemsAdd() {
           </div>
 
           <div className="flex items-center justify-center">
-            <div className="border-2 border-black rounded">
+            <div className="border-2 border-black rounded p-4">
               <input
                 type="file"
                 accept="image/*"
@@ -358,26 +359,26 @@ function ItemsAdd() {
                 onChange={handleImageChange}
               />
 
-              <span>{images.length}</span>
 
               <button
                 onClick={handleImagesUpload}
-                className={`p-2 rounded ${
+                className={`mx-10 p-2 rounded ${
                   !uploadingImages
-                    ? "bg-teal-200 hover:bg-teal-500"
-                    : "bg-teal-700"
-                }`}
-                disabled={uploadingImages}
-              >
+                  ? "bg-teal-200 hover:bg-teal-500"
+                  : "bg-teal-700"
+                  }`}
+                  disabled={uploadingImages}
+                  >
                 {uploadingImages ? "Uploading" : "Upload Selected Images"}
               </button>
 
-              {imagesId && (
+                <span className="ml-20">Selected Images : {images.length}</span>
+              {imagesId.length!==0 && (
                 <>
-                  <br />
-                  <div className="grid grid-cols-3 gap-4">
+                <Separator className="my-2 bg-black"/>
+                  <div className="grid grid-cols-3 gap-4 bg-gray-200 p-1">
                     {imagesId.map((imageId) => (
-                      <div key={imageId}>
+                      <div key={imageId} className="border-black border-2">
                         <CldImage
                           width="300"
                           height="300"
