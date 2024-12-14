@@ -79,8 +79,6 @@ function BrandsAdd() {
       const result = await createBrand(title, description, data.publicId);
       if (result === true) {
         const now = new Date();
-
-        // TODO display a new brand is created
         toast("A new Brand has been created", {
           description: "At " + format(now.toISOString(), "yyyy-MM-dd HH:mm:ss"),
           action: null,
