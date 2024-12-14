@@ -39,10 +39,8 @@ function AddBanner() {
   const [highlightedText, setHighlightedText] = useState<string>("50% OFF!!!");
   const [highlightedTextColor, setHighlightedTextColor] =
     useState<string>("white");
-  const [titleColor, setTitleColor] =
-    useState<string>("blue-950");
-  const [descriptionColor, setDescriptionColor] =
-    useState<string>("black");
+  const [titleColor, setTitleColor] = useState<string>("blue-950");
+  const [descriptionColor, setDescriptionColor] = useState<string>("black");
   const [secondaryHighlightedTextColor, setSecondaryHighlightedTextColor] =
     useState<string>("indigo-900");
 
@@ -65,7 +63,12 @@ function AddBanner() {
   const [isItemFeatured, setItemFeatured] = useState<string>("false");
   const [items, setItems] = useState<{ value: string; label: string }[]>([]);
 
-  const [itemDetails, setItemDetails] = useState<itemDetails>({itemId:"",itemDescription:"",itemDisplayImageId:"",itemName:""});
+  const [itemDetails, setItemDetails] = useState<itemDetails>({
+    itemId: "",
+    itemDescription: "",
+    itemDisplayImageId: "",
+    itemName: "",
+  });
 
   const [isButtonPresent, setButtonPresent] = useState<string>("true");
 
@@ -120,6 +123,8 @@ function AddBanner() {
             itemDisplayImageId: data.displayImageRef,
           };
           setItemDetails(details);
+          setBannerTitle(data.itemName);
+          setBannerDescription(data.itemDescription);
           // const data = snap.data();
           // TODO get item details here
           // setItems(transformedArray);
@@ -159,12 +164,22 @@ function AddBanner() {
   };
   const changeTitlePresence = (value: string) => {
     setTitlePresent(value);
+    if (value === "false") {
+      setBannerTitle(itemDetails.itemName || "");
+    }
   };
   const changeBannerDescriptionPresence = (value: string) => {
     setBannerDescriptionPresent(value);
+    if (value === "false") {
+      setBannerDescription(itemDetails.itemDescription);
+    }
   };
   const changeItemFeatured = (value: string) => {
-    setItemFeatured(value);
+    if (value === "") {
+      setItemFeatured("false");
+    } else {
+      setItemFeatured(value);
+    }
 
     if (value !== "") {
       const opt = buttonOptions;
@@ -175,6 +190,8 @@ function AddBanner() {
         opt.push({ label: "Item Selected", value: value });
       }
       setButtonOptions(opt);
+      const name = itemDetails.itemName;
+      setBannerTitle(name);
     } else if (value === "") {
       if (buttonOptions.length === 3) {
         const opt = buttonOptions;
@@ -185,6 +202,9 @@ function AddBanner() {
   };
   const changeSecondaryHighlightedPresent = (value: string) => {
     setIsBannerSecondaryHighlightedPresent(value);
+    if (value === "false") {
+      setBannerSecondaryHighlighted("Don't miss out on this deal!");
+    }
   };
   const changeButtonPresence = (value: string) => {
     setButtonPresent(value);
@@ -193,61 +213,82 @@ function AddBanner() {
   const handleCreateBanner = async () => {
     setCreating(true);
 
-    try{
-
-      type bannerData={
-        bannerTitle:string;
-        bannerTitleColor:string;
-        bannerDescription:string;
-        bannerDescriptionColor:string;
-        bannerHighlightedText:string;
-        bannerHighlightedTextColor:string;
-        bannerSecondaryHighlightedText:string;
-        bannerSecondaryHighlightedTextColor:string;
-        isItemFeatured:string;
-        leftPanelColor:string;
-        rightPanelColor:string;
+    try {
+      type bannerData = {
+        bannerTitle: string;
+        bannerTitleColor: string;
+        bannerDescription: string;
+        bannerDescriptionColor: string;
+        bannerHighlightedText: string;
+        bannerHighlightedTextColor: string;
+        bannerSecondaryHighlightedText: string;
+        bannerSecondaryHighlightedTextColor: string;
+        leftPanelColor: string;
+        rightPanelColor: string;
         // currently this button only contains two options true if item featured or false if no button
-        isNavigationButton:string;
-        presence:{
-          button:boolean,
-          isItemFeatured:boolean,
+        // isNavigationButton:string;
 
-          isHighlightedPresent:boolean,
-          isSecondaryHighlightedPresent:boolean,
-          isDescriptionPresent:boolean,
-          isTitlePresent:boolean,
-        }
-        itemFeaturedId:string;
+        presence: {
+          buttonPresent: boolean;
+          isItemFeatured: boolean;
+
+          isHighlightedPresent: boolean;
+          isSecondaryHighlightedPresent: boolean;
+          isDescriptionPresent: boolean;
+          isTitlePresent: boolean;
+        };
+        itemFeaturedId: string;
+      };
+      const presenceMaker = {
+        buttonPresent: isButtonPresent === "none" ? false : true,
+        isItemFeatured: isItemFeatured === "false" ? false : true,
+
+        isHighlightedPresent: highlightedText === "" ? false : true,
+
+        isSecondaryHighlightedPresent:
+          isBannerSecondaryHighlightedPresent !== "none" &&
+          bannerSecondaryHighlighted !== ""
+            ? true
+            : false,
+
+        isDescriptionPresent:
+          isBannerDescriptionPresent !== "none" && bannerDescription !== ""
+            ? true
+            : false,
+
+        isTitlePresent:
+          isTitlePresent !== "none" && bannerTitle !== "" ? true : false,
+      };
+
+      const bannerDetails: bannerData = {
+        bannerTitle: bannerTitle,
+
+        bannerTitleColor: titleColor,
+        bannerDescription: bannerDescription,
+        bannerDescriptionColor: descriptionColor,
+        bannerHighlightedText: highlightedText,
+        bannerHighlightedTextColor: highlightedTextColor,
+        bannerSecondaryHighlightedText: bannerSecondaryHighlighted,
+        bannerSecondaryHighlightedTextColor: secondaryHighlightedTextColor,
+
+        leftPanelColor: colorLeftPanel,
+        rightPanelColor: colorRightPanel,
+
+        presence: presenceMaker,
+
+        itemFeaturedId: isItemFeatured,
+      };
+      const result = await createBanner(bannerDetails);
+
+      if (result) {
+        // TODO make a sonner toast
+        router.push("/");
       }
-
-
-      const bannerDetails:bannerData={
-        bannerTitle:bannerTitle,
-
-        bannerTitleColor:titleColor,
-        bannerDescription:bannerDescription,
-        bannerDescriptionColor:descriptionColor,
-        bannerHighlightedText:highlightedText,
-        bannerHighlightedTextColor:highlightedTextColor,
-        bannerSecondaryHighlightedText:bannerSecondaryHighlighted,
-        bannerSecondaryHighlightedTextColor:secondaryHighlightedTextColor,
-
-      }
-
-      const result=await createBanner(
-        {
-          
-        }
-      )
-
-
-
-      // TODO make a sonner toast
-      router.push('/');
-
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setCreating(false);
     }
-    catch(e) {console.error(e);setCreating(false);}
   };
 
   return (
@@ -292,11 +333,15 @@ function AddBanner() {
                 {isTitlePresent === "none" ? (
                   <></>
                 ) : isTitlePresent === "false" ? (
-                  <span className={`text-${titleColor} font-semibold text-6xl font-serif`}>
+                  <span
+                    className={`text-${titleColor} font-semibold text-6xl font-serif`}
+                  >
                     {itemDetails?.itemName}
                   </span>
                 ) : (
-                  <span className={`text-${titleColor} font-semibold text-6xl font-serif`}>
+                  <span
+                    className={`text-${titleColor} font-semibold text-6xl font-serif`}
+                  >
                     {bannerTitle}
                   </span>
                 )}
@@ -305,11 +350,15 @@ function AddBanner() {
                 {isBannerDescriptionPresent === "none" ? (
                   <></>
                 ) : isBannerDescriptionPresent === "false" ? (
-                  <span className={`text-${descriptionColor} text-sm mt-2 font-medium`}>
+                  <span
+                    className={`text-${descriptionColor} text-sm mt-2 font-medium`}
+                  >
                     {itemDetails?.itemDescription}
                   </span>
                 ) : (
-                  <span className={`text-${descriptionColor} text-sm mt-2 font-medium`}>
+                  <span
+                    className={`text-${descriptionColor} text-sm mt-2 font-medium`}
+                  >
                     {bannerDescription}
                   </span>
                 )}
@@ -320,30 +369,32 @@ function AddBanner() {
                 <></>
               ) : isBannerSecondaryHighlightedPresent === "false" ? (
                 <div className="flex items-center flex-col my-auto">
-                  <span className={`text-6xl text-${secondaryHighlightedTextColor} font-semibold font-mono`}>
+                  <span
+                    className={`text-6xl text-${secondaryHighlightedTextColor} font-semibold font-mono`}
+                  >
                     Dont miss out on this deal!
                   </span>
                 </div>
               ) : (
                 <div className="flex items-center flex-col my-auto">
-                  <span className={`text-6xl text-${secondaryHighlightedTextColor} font-semibold font-mono`}>
+                  <span
+                    className={`text-6xl text-${secondaryHighlightedTextColor} font-semibold font-mono`}
+                  >
                     {bannerSecondaryHighlighted}
                   </span>
                 </div>
               )}
 
-              {isButtonPresent==="none"?
-              
-              
-              <></>
-              :
-              <div className="flex mt-auto">
-                <button className="ml-40 mb-20 text-2xl bg-black p-2 rounded text-white flex items-center gap-2 ">
-                  Buy Now
-                  <SquareArrowUpRight />
-                </button>
-              </div>
-                }
+              {isButtonPresent === "none" ? (
+                <></>
+              ) : (
+                <div className="flex mt-auto">
+                  <button className="ml-40 mb-20 text-2xl bg-black p-2 rounded text-white flex items-center gap-2 ">
+                    Buy Now
+                    <SquareArrowUpRight />
+                  </button>
+                </div>
+              )}
             </div>
 
             {!(isItemFeatured === "false" || isItemFeatured === "") && (
@@ -359,7 +410,9 @@ function AddBanner() {
                   </CardHeader>
                   <CardContent>
                     <CldImage
-                      src={itemDetails?.itemDisplayImageId||"samples/balloons"} // Use this sample image or upload your own via the Media Explorer
+                      src={
+                        itemDetails?.itemDisplayImageId || "samples/balloons"
+                      } // Use this sample image or upload your own via the Media Explorer
                       width="200" // Transform the image: auto-crop to square aspect_ratio
                       height="200"
                       alt="banner"
@@ -665,7 +718,6 @@ function AddBanner() {
           </div>
         </div>
       )}
-      {isButtonPresent}
     </>
   );
 }

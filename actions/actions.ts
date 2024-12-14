@@ -99,7 +99,8 @@ export async function createItem({
   }
 }
 export async function createBanner({
-  bannerTitle,
+  bannerTitle: bannerTitle,
+
   bannerTitleColor,
   bannerDescription,
   bannerDescriptionColor,
@@ -107,40 +108,56 @@ export async function createBanner({
   bannerHighlightedTextColor,
   bannerSecondaryHighlightedText,
   bannerSecondaryHighlightedTextColor,
-  isItemFeatured,
+
+  leftPanelColor,
+  rightPanelColor,
+
+  presence,
+
   itemFeaturedId,
-  // TODO currently this button only contains two options true if item featured or false if no button
-  isNavigationButton,
 }: {
-  bannerTitle:string;
-  bannerTitleColor:string;
-  bannerDescription:string;
-  bannerDescriptionColor:string;
-  bannerHighlightedText:string;
-  bannerHighlightedTextColor:string;
-  bannerSecondaryHighlightedText:string;
-  bannerSecondaryHighlightedTextColor:string;
-  isItemFeatured:string;
-  itemFeaturedId:string;
-  // TODO currently this button only contains two options true if item featured or false if no button
-  isNavigationButton:string;
+  bannerTitle: string;
+  bannerTitleColor: string;
+  bannerDescription: string;
+  bannerDescriptionColor: string;
+  bannerHighlightedText: string;
+  bannerHighlightedTextColor: string;
+  bannerSecondaryHighlightedText: string;
+  bannerSecondaryHighlightedTextColor: string;
+  leftPanelColor: string;
+  rightPanelColor: string;
+  // currently this button only contains two options true if item featured or false if no button
+  // isNavigationButton:string;
+
+  presence: {
+    buttonPresent: boolean;
+    isItemFeatured: boolean;
+
+    isHighlightedPresent: boolean;
+    isSecondaryHighlightedPresent: boolean;
+    isDescriptionPresent: boolean;
+    isTitlePresent: boolean;
+  };
+  itemFeaturedId: string;
 }): Promise<boolean> {
   try {
     const result = await adminDb.collection("banners").add({
-      title:bannerTitle,
-      titleColor:bannerTitleColor,
+      bannerTitle: bannerTitle,
 
-      description:bannerDescription,
-      descriptionColor:bannerDescriptionColor,
+      bannerTitleColor: bannerTitleColor,
+      bannerDescription: bannerDescription,
+      bannerDescriptionColor: bannerDescriptionColor,
+      bannerHighlightedText: bannerHighlightedText,
+      bannerHighlightedTextColor: bannerHighlightedTextColor,
+      bannerSecondaryHighlightedText: bannerSecondaryHighlightedText,
+      bannerSecondaryHighlightedTextColor: bannerSecondaryHighlightedTextColor,
 
-      highlightedText:bannerHighlightedText,
-      highlightedTextColor:bannerHighlightedTextColor,
-      secondaryHighlightedText:bannerSecondaryHighlightedText,
-      secondaryHighlightedTextColor:bannerSecondaryHighlightedTextColor,
-      isItemFeatured:isItemFeatured,
-      itemFeaturedId:itemFeaturedId,
-      isNavigationButton:isNavigationButton,
+      leftPanelColor: leftPanelColor,
+      rightPanelColor: rightPanelColor,
 
+      presence: presence,
+
+      itemFeaturedId: itemFeaturedId,
     });
     if (!result.id) {
       return false;
