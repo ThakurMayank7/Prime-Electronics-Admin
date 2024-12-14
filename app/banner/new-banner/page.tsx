@@ -21,6 +21,8 @@ import Spinner from "@/components/BlocksSpinner";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { createBanner } from "@/actions/actions";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 type itemDetails = {
   itemId: string;
@@ -281,7 +283,14 @@ function AddBanner() {
       const result = await createBanner(bannerDetails);
 
       if (result) {
-        // TODO make a sonner toast
+        const now = new Date();
+        toast("Created New Banner", {
+          description:
+            "Created a new banner : " +
+            " At " +
+            format(now.toISOString(), "yyyy-MM-dd HH:mm:ss"),
+          action: null,
+        });
         router.push("/");
       }
     } catch (e) {
