@@ -44,12 +44,24 @@ function AddBanner() {
   const [bannerDescription,setBannerDescription] = useState<string>("")
 
   const [isBannerDescriptionPresent,setBannerDescriptionPresent] = useState<string>("true");
+  const [bannerSecondaryHighlighted,setBannerSecondaryHighlighted] = useState<string>("")
+
+  const [isBannerSecondaryHighlightedPresent,setIsBannerSecondaryHighlightedPresent] = useState<string>("true");
 
   const [isItemFeatured,setItemFeatured] = useState<string>("false");
   const [items,setItems] = useState<{value:string,label:string}[]>([]);
 
   const [itemDetails,setItemDetails] =useState<itemDetails>();
 
+
+  const [isButtonPresent,setButtonPresent] = useState<string>("true");
+
+  const [buttonOptions,setButtonOptions] = useState<{value:string,label:string}[]>(
+    [
+      {value:"none",label:"None"},
+      {value:"custom",label:"Custom"}
+    ]
+  );
 
   useEffect(() => {
     if (user === null && loading === false) {
@@ -122,6 +134,40 @@ function AddBanner() {
   };
   const changeItemFeatured = (value: string) => {
     setItemFeatured(value);
+
+
+    if(value!=="")
+    {
+      const opt=buttonOptions;
+      if(opt.length===3)
+      {
+        opt[2].label="Item Selected";
+        opt[2].value=value;
+      }
+      else{
+        opt.push({label:"Item Selected",value:value});
+      }
+      setButtonOptions(opt);
+    }
+    else if(value==="")
+    {
+      if(buttonOptions.length===3)
+      {
+        const opt=buttonOptions;
+        opt.pop();
+        setButtonOptions(opt);
+        
+
+      }
+    }
+
+
+  };
+  const changeSecondaryHighlightedPresent = (value: string) => {
+    setIsBannerSecondaryHighlightedPresent(value);
+  };
+  const changeButtonPresence = (value: string) => {
+    setButtonPresent(value);
   };
 
   return (
@@ -131,9 +177,13 @@ function AddBanner() {
         // style={{ backgroundImage: `url(${url})` }}  add later
       >
         <div
-          className={`w-2/3 bg-${
+          className={`bg-${
             colorLeftPanel ? `${colorLeftPanel}` : "gray-500"
-          } h-full flex flex-col`}
+          } h-full flex flex-col 
+          
+          ${!(isItemFeatured==="false" || isItemFeatured==="")?"w-2/3":"w-full"}
+          
+          `}
         >
           <div className="flex items-center justify-center">
             {/* Highlighted Text */}
@@ -177,12 +227,25 @@ function AddBanner() {
                         }
           </div>
 
-          <div className="flex items-center flex-col my-auto">
+                        {/* Secondary Highlighted */}
+                        {isBannerSecondaryHighlightedPresent==="none"?<></>:
+                        (isBannerSecondaryHighlightedPresent==="false"?
+                          
+                          <div className="flex items-center flex-col my-auto">
             <span className="text-6xl text-indigo-900 font-semibold font-mono">
               Dont miss out on this deal!
             </span>
           </div>
+            :
+                          <div className="flex items-center flex-col my-auto">
+            <span className="text-6xl text-indigo-900 font-semibold font-mono">
+              {bannerSecondaryHighlighted}
+            </span>
+          </div>
+          
+          )
 
+          }
           <div className="flex mt-auto">
             <button className="ml-40 mb-20 text-2xl bg-black p-2 rounded text-white flex items-center gap-2 ">
               Buy Now
@@ -191,8 +254,12 @@ function AddBanner() {
           </div>
         </div>
 
+                        {!(isItemFeatured==="false" || isItemFeatured==="") &&
+                        
+                        
+                        
         <div
-          className={`w-1/3 bg-${colorRightPanel} h-full flex items-center justify-center`}
+        className={`w-1/3 bg-${colorRightPanel} h-full flex items-center justify-center`}
         >
           <Card className="w-1/2">
             <CardHeader>
@@ -216,6 +283,7 @@ function AddBanner() {
             </CardContent>
           </Card>
         </div>
+        }
       </div>
 
       <div className="w-full p-10">
@@ -224,39 +292,16 @@ function AddBanner() {
 
 
 
-{/* TODO Feature items */}
+{/* Feature items */}
           <div className="flex flex-col border-2 border-black p-2">
             <div className="flex items-center">
 
-            <span className="text-xl">Description</span>
+            <span className="text-xl">Feature a Item</span>
             <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
 
 
             <ComboBox defaultValue="Feature a Item here" datas={items} valueChange={changeItemFeatured} />
             </div>
-
-{
-  isItemFeatured==="true" &&
-<>
-          
-            <Separator className="bg-black my-1"/>
-<div className="flex flex-row items-center">
-
-  <div className="w-1/2 flex flex-row justify-center items-center">
-  <span>Text</span>
-  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
-  <input placeholder="Enter Description" className="border-2 border-black rounded p-1" type="text" value={bannerDescription} onChange={(e)=>setBannerDescription(e.target.value)}/>
-  </div>
-  <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
-  <div className="w-1/2 flex flex-row justify-center items-center">
-  <span>Highlighted Text Color</span>
-  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
-  <ComboBox defaultValue="Choose Color" datas={colors} valueChange={changeHighlightedTextColor} />
-  </div>
-</div>
-</>
-
-}
 </div>
 
 
@@ -394,6 +439,44 @@ function AddBanner() {
 
 
 
+{/* Secondary highlighted text */}
+<br />
+          <div className="flex flex-col border-2 border-black p-2">
+            <div className="flex items-center">
+
+            <span className="text-xl">Secondary Highlighted Text</span>
+            <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+
+
+            <ComboBox defaultValue="Default" datas={booleanValues} valueChange={changeSecondaryHighlightedPresent} />
+            </div>
+
+{
+  isBannerSecondaryHighlightedPresent==="true" &&
+<>
+          
+            <Separator className="bg-black my-1"/>
+<div className="flex flex-row items-center">
+
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Text</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <input placeholder="Enter Description" className="border-2 border-black rounded p-1" type="text" value={bannerSecondaryHighlighted} onChange={(e)=>setBannerSecondaryHighlighted(e.target.value)}/>
+  </div>
+  <Separator orientation="vertical" className="bg-black mx-1 h-10"/>
+  <div className="w-1/2 flex flex-row justify-center items-center">
+  <span>Highlighted Text Color</span>
+  <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
+  <ComboBox defaultValue="Choose Color" datas={colors} valueChange={changeHighlightedTextColor} />
+  </div>
+</div>
+</>
+
+}
+</div>
+
+
+
 
 
 
@@ -401,35 +484,18 @@ function AddBanner() {
 
 
 <br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
-<br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
-<br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
-<br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
-<br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
-<br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
-<br />
-          <div className="flex border-2 border-black items-center">
-asfdd
-          </div>
+          <div className="flex border-2 border-black items-center p-2">
+          <div className="flex items-center">
+
+<span className="text-xl">Navigation Button</span>
+<Separator orientation="vertical" className="bg-black mx-2 h-6"/>
 
 
+<ComboBox defaultValue="Default" datas={buttonOptions} valueChange={changeButtonPresence} />
+</div>
+
+
+          </div>
 
 
 
