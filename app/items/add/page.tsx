@@ -25,9 +25,7 @@ function ItemsAdd() {
   const [publicId, setPublicId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [finalId, setFinalId] = useState<string>("");
   const [creating, setCreating] = useState(false);
-  const [finalImagesId, setFinalImagesId] = useState<string[]>([]);
 
   const [images, setImages] = useState<File[]>([]);
   const [imagesId, setImagesId] = useState<string[]>([]);
@@ -75,10 +73,14 @@ function ItemsAdd() {
         }
 
         const data = await response.json();
-        setFinalId(data.publicId);
+        const finalId: string = data.publicId;
+        // setFinalId(data.publicId);
 
         // Uploading other Images
-        setFinalImagesId([]);
+        // setFinalImagesId([]);
+
+        const finalImagesId: string[] = [];
+
         for (let i = 0; i < images.length; i++) {
           const formData = new FormData();
           formData.append("file", images[i]);
@@ -97,7 +99,7 @@ function ItemsAdd() {
 
           const data = await response.json();
 
-          setFinalImagesId((prev) => [...prev, data.publicId]);
+          finalImagesId.push(data.publicId);
         }
 
         // Adding to firebase
