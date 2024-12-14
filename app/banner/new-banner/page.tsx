@@ -21,6 +21,12 @@ import Spinner from "@/components/BlocksSpinner";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 
+type itemDetails={
+  itemName:string;
+  itemDescription:string;
+  itemDisplayImageId:string;
+}
+
 function AddBanner() {
   const { user, loading } = useAuth();
 
@@ -41,6 +47,8 @@ function AddBanner() {
 
   const [isItemFeatured,setItemFeatured] = useState<string>("false");
   const [items,setItems] = useState<{value:string,label:string}[]>([]);
+
+  const [itemDetails,setItemDetails] =useState<itemDetails>();
 
 
   useEffect(() => {
@@ -76,7 +84,10 @@ function AddBanner() {
         const snap = await getDoc(doc(db, "items", isItemFeatured));
 
         if (snap.exists()) {
-          console.log(isItemFeatured)
+          // console.log(snap.data())
+          const data=snap.data();
+          const details:itemDetails={itemName:data.itemName,itemDescription:data.itemDescription,itemDisplayImageId:data.displayImageRef}
+          setItemDetails(details)
           // const data = snap.data();
           // TODO get item details here
           // setItems(transformedArray);
