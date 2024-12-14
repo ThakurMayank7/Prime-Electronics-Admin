@@ -15,9 +15,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ComboBox from "@/components/ChooseComboBox";
-import {  booleanDefaultValues, booleanValues, colors } from "@/lib/constants";
+import { booleanValues, colors } from "@/lib/constants";
 import { Separator } from "@/components/ui/separator";
 import Spinner from "@/components/BlocksSpinner";
+import { db } from "@/firebase/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 function AddBanner() {
   const { user, loading } = useAuth();
@@ -38,6 +40,7 @@ function AddBanner() {
   const [isBannerDescriptionPresent,setBannerDescriptionPresent] = useState<string>("true");
 
   const [isItemFeatured,setItemFeatured] = useState<string>("false");
+  const [items,setItems] = useState<{value:string,label:string}[]>([]);
 
 
   useEffect(() => {
@@ -45,6 +48,47 @@ function AddBanner() {
       router.push("/login");
     }
   }, [user, router, loading]);
+
+  useEffect(() => {
+    try {
+      const fetchBrandsData = async () => {
+        const snap = await getDoc(doc(db, "data", "items"));
+
+        if (snap.exists()) {
+          const data = snap.data();
+          const transformedArray = Object.keys(data).map((field) => ({
+            value: field,
+            label: data[field],
+          }));
+          setItems(transformedArray);
+        }
+      };
+      fetchBrandsData();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  useEffect(()=>{
+    if(!isItemFeatured) return;
+
+    try {
+      const fetchBrandsData = async () => {
+        const snap = await getDoc(doc(db, "items", isItemFeatured));
+
+        if (snap.exists()) {
+          console.log(isItemFeatured)
+          // const data = snap.data();
+          // TODO get item details here
+          // setItems(transformedArray);
+        }
+      };
+      fetchBrandsData();
+    } catch (error) {
+      console.error(error);
+    }
+
+
+  },[isItemFeatured])
 
   if (loading) {
     return <div className="h-screen w-screen flex items-center justify-center"><Spinner/></div>;
@@ -149,7 +193,7 @@ function AddBanner() {
             </CardHeader>
             <CardContent>
               <CldImage
-                src="cld-sample-2" // Use this sample image or upload your own via the Media Explorer
+                src="primeElectronics/items/displayImages/roxrhksadevnwc1quzly" // Use this sample image or upload your own via the Media Explorer
                 width="200" // Transform the image: auto-crop to square aspect_ratio
                 height="200"
                 alt="banner"
@@ -177,7 +221,7 @@ function AddBanner() {
             <Separator orientation="vertical" className="bg-black mx-2 h-6"/>
 
 
-            <ComboBox defaultValue="Feature a Item here" datas={booleanDefaultValues} valueChange={changeItemFeatured} />
+            <ComboBox defaultValue="Feature a Item here" datas={items} valueChange={changeItemFeatured} />
             </div>
 
 {

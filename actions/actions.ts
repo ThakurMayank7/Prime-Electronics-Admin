@@ -51,9 +51,9 @@ export async function createBrand(
     }
 
     await adminDb
-  .collection("data")
-  .doc("brands")
-  .set({ [result.id]: brandName }, { merge: true });
+      .collection("data")
+      .doc("brands")
+      .set({ [result.id]: brandName }, { merge: true });
 
     return true;
   } catch (error) {
@@ -82,12 +82,16 @@ export async function createItem({
       itemDescription: itemDescription,
       displayImageRef: displayImageRef,
       imagesRefs: imagesRefs,
-      brandId:itemBrandId,
-      category:itemCategory,
+      brandId: itemBrandId,
+      category: itemCategory,
     });
     if (!result.id) {
       return false;
     }
+    await adminDb
+      .collection("data")
+      .doc("items")
+      .set({ [result.id]: itemName }, { merge: true });
     return true;
   } catch (error) {
     console.error(error);
