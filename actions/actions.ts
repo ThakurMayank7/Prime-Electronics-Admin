@@ -49,27 +49,37 @@ export async function createBrand(
     if (!result.id) {
       return false;
     }
+    
+    await adminDb
+  .collection("data")
+  .doc("brands")
+  .set({ [result.id]: brandName }, { merge: true });
+
     return true;
   } catch (error) {
     console.error(error);
     return false;
   }
 }
-export async function createItem(
-  {itemName,itemDescription,displayImageRef,imagesRefs}:
-  {itemName: string,
-  itemDescription: string,
-  itemBrandId:string,
-  itemCategory:string;
-  displayImageRef: string,
-  imagesRefs:string[]}
-): Promise<boolean> {
+export async function createItem({
+  itemName,
+  itemDescription,
+  displayImageRef,
+  imagesRefs,
+}: {
+  itemName: string;
+  itemDescription: string;
+  itemBrandId: string;
+  itemCategory: string;
+  displayImageRef: string;
+  imagesRefs: string[];
+}): Promise<boolean> {
   try {
     const result = await adminDb.collection("items").add({
-      itemName:itemName,
-      itemDescription:itemDescription,
-      displayImageRef:displayImageRef,
-      imagesRefs:imagesRefs
+      itemName: itemName,
+      itemDescription: itemDescription,
+      displayImageRef: displayImageRef,
+      imagesRefs: imagesRefs,
     });
     if (!result.id) {
       return false;
