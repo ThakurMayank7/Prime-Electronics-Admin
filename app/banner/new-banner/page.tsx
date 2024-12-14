@@ -22,6 +22,7 @@ import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 
 type itemDetails={
+  itemId:string;
   itemName:string;
   itemDescription:string;
   itemDisplayImageId:string;
@@ -63,6 +64,8 @@ function AddBanner() {
     ]
   );
 
+  const [creating,setCreating]=useState<boolean>(false);
+
   useEffect(() => {
     if (user === null && loading === false) {
       router.push("/login");
@@ -98,7 +101,7 @@ function AddBanner() {
         if (snap.exists()) {
           // console.log(snap.data())
           const data=snap.data();
-          const details:itemDetails={itemName:data.itemName,itemDescription:data.itemDescription,itemDisplayImageId:data.displayImageRef}
+          const details:itemDetails={itemId:isItemFeatured,itemName:data.itemName,itemDescription:data.itemDescription,itemDisplayImageId:data.displayImageRef}
           setItemDetails(details)
           // const data = snap.data();
           // TODO get item details here
@@ -170,7 +173,38 @@ function AddBanner() {
     setButtonPresent(value);
   };
 
+  const handleCreateBanner=()=>{
+    setCreating(true)
+
+    
+
+
+
+
+
+
+
+
+
+  }
+
   return (
+<>
+    {creating?
+
+<div className="flex items-center flex-col my-16">
+<span className="text-4xl font-semibold">
+  Creating the Banner! Please wait...
+</span>
+<br />
+<Spinner />
+</div>
+
+      :
+
+
+      
+      
     <div className="flex flex-col items-center">
       <div
         className="w-[1400px] h-[500px] flex flex-row"
@@ -255,8 +289,8 @@ function AddBanner() {
         </div>
 
                         {!(isItemFeatured==="false" || isItemFeatured==="") &&
-                        
-                        
+                          
+                          
                         
         <div
         className={`w-1/3 bg-${colorRightPanel} h-full flex items-center justify-center`}
@@ -496,7 +530,14 @@ function AddBanner() {
 
 
           </div>
-
+<br />
+<div className="flex items-center justify-center">
+  <button 
+  onClick={handleCreateBanner}
+  
+  className="text-2xl font-serif bg-teal-600 hover:bg-teal-800 text-white p-2 rounded">Create Banner</button>
+</div>
+<br />
 
 
 
@@ -507,6 +548,9 @@ function AddBanner() {
         </div>
       </div>
     </div>
+  }
+  </>
+
   );
 }
 

@@ -98,3 +98,56 @@ export async function createItem({
     return false;
   }
 }
+export async function createBanner({
+  bannerTitle,
+  bannerTitleColor,
+  bannerDescription,
+  bannerDescriptionColor,
+  bannerHighlightedText,
+  bannerHighlightedTextColor,
+  bannerSecondaryHighlightedText,
+  bannerSecondaryHighlightedTextColor,
+  isItemFeatured,
+  itemFeaturedId,
+  // TODO currently this button only contains two options true if item featured or false if no button
+  isNavigationButton,
+}: {
+  bannerTitle:string;
+  bannerTitleColor:string;
+  bannerDescription:string;
+  bannerDescriptionColor:string;
+  bannerHighlightedText:string;
+  bannerHighlightedTextColor:string;
+  bannerSecondaryHighlightedText:string;
+  bannerSecondaryHighlightedTextColor:string;
+  isItemFeatured:string;
+  itemFeaturedId:string;
+  // TODO currently this button only contains two options true if item featured or false if no button
+  isNavigationButton:string;
+}): Promise<boolean> {
+  try {
+    const result = await adminDb.collection("banners").add({
+      title:bannerTitle,
+      titleColor:bannerTitleColor,
+
+      description:bannerDescription,
+      descriptionColor:bannerDescriptionColor,
+
+      highlightedText:bannerHighlightedText,
+      highlightedTextColor:bannerHighlightedTextColor,
+      secondaryHighlightedText:bannerSecondaryHighlightedText,
+      secondaryHighlightedTextColor:bannerSecondaryHighlightedTextColor,
+      isItemFeatured:isItemFeatured,
+      itemFeaturedId:itemFeaturedId,
+      isNavigationButton:isNavigationButton,
+
+    });
+    if (!result.id) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
