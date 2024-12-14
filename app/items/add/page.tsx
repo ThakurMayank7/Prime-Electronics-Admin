@@ -9,6 +9,9 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { createItem } from "@/actions/actions";
 import { Separator } from "@/components/ui/separator";
+import ComboBox from "@/components/ChooseComboBox";
+import { db } from "@/firebase/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 function ItemsAdd() {
   const { user, loading } = useAuth();
@@ -32,11 +35,42 @@ function ItemsAdd() {
   const [imagesId, setImagesId] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState<boolean>(false);
 
+const [brandsData,setBrandsData] = useState<{ value: string; label: string; }[]>([]);
+
   useEffect(() => {
     if (user === null && loading === false) {
       router.push("/login");
     }
   }, [user, router, loading]);
+
+  useEffect(
+    ()=>{
+      try{
+
+        const fetchBrandsData=async()=>{
+
+          const snap=await getDoc(doc(db,'data','brands'));
+
+          if(snap.exists())
+          {
+            const data=snap.data();
+            const transformedArray = Object.keys(data).map((field) => ({
+              value: field,      // The field name becomes the `value`
+              label: data[field] // The field value becomes the `label`
+            }));
+            setBrandsData(transformedArray);
+          }
+
+
+
+
+
+        }
+        fetchBrandsData();
+      }
+      catch(error){console.error(error)}
+    }
+  ,[])
 
   if (loading) {
     return (
@@ -235,6 +269,11 @@ function ItemsAdd() {
     }
   };
 
+  const changeBrand=(value:string)=>{
+
+    setBrand(value);
+  }
+
   return (
     <div>
       {creating ? (
@@ -291,12 +330,7 @@ function ItemsAdd() {
                 <span className="font-semibold mr-2 w-1/2 text-center">
                   Brand
                 </span>
-                <input
-                  className="bg-gray-200 border-2 border-black rounded p-2"
-                  type="text"
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
-                />
+                <ComboBox defaultValue="Choose a brand" datas={brandsData} valueChange={changeBrand} />
               </div>
 
               <br />
