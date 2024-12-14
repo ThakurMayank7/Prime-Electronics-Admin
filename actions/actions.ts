@@ -49,7 +49,7 @@ export async function createBrand(
     if (!result.id) {
       return false;
     }
-    
+
     await adminDb
   .collection("data")
   .doc("brands")
@@ -66,6 +66,8 @@ export async function createItem({
   itemDescription,
   displayImageRef,
   imagesRefs,
+  itemBrandId,
+  itemCategory,
 }: {
   itemName: string;
   itemDescription: string;
@@ -80,6 +82,8 @@ export async function createItem({
       itemDescription: itemDescription,
       displayImageRef: displayImageRef,
       imagesRefs: imagesRefs,
+      brandId:itemBrandId,
+      category:itemCategory,
     });
     if (!result.id) {
       return false;

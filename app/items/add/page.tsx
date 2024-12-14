@@ -151,7 +151,7 @@ function ItemsAdd() {
             action: null,
           });
 
-          router.refresh();
+          router.push("/");
         } else {
           toast("Error Occurred", {
             description:
@@ -273,6 +273,7 @@ function ItemsAdd() {
           <span className="text-4xl font-semibold">
             Creating the item! Please wait...
           </span>
+          <br />
           <Spinner />
         </div>
       ) : (
