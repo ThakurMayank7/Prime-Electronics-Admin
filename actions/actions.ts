@@ -59,6 +59,8 @@ export async function createItem(
   {itemName,itemDescription,displayImageRef,imagesRefs}:
   {itemName: string,
   itemDescription: string,
+  itemBrandId:string,
+  itemCategory:string;
   displayImageRef: string,
   imagesRefs:string[]}
 ): Promise<boolean> {

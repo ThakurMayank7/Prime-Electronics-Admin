@@ -107,6 +107,8 @@ function ItemsAdd() {
         const result = await createItem({
           itemName: title,
           itemDescription: description,
+          itemBrandId:brand,
+          itemCategory:category,
           displayImageRef: finalId,
           imagesRefs: finalImagesId,
         });
