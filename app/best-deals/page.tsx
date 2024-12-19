@@ -3,15 +3,14 @@
 import { Button } from '@/components/ui/button'
 import { db } from '@/firebase/firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
 function BestDeals() {
 
   const [allItems,setAllItems]=useState<{id:string,title:string}[]>([]);
 
-  const [itemsId,setItemsId]=useState<{position:string,item:string}[]>([]);
-
-  const [items,setItems]=useState();
+  const [items,setItems]=useState<{position:string,item:string}[]>([]);
 
 
   useEffect(()=>{
@@ -53,7 +52,7 @@ try{
           item: result[key],
         }));
 
-      setItemsId(fetchedData);
+      setItems(fetchedData);
     }
 
 
@@ -65,6 +64,14 @@ try{
 catch(err){console.error(err)}
   },[])
 
+
+
+  // Helper function to get title by ID
+  const getTitleById = (id: string): string | undefined => {
+    const foundItem = allItems.find((item) => item.id === id);
+    return foundItem?.title;
+  };
+
   return (
     <div>
       <div>
@@ -73,10 +80,23 @@ catch(err){console.error(err)}
       </div>
 <br />
       {/* TODO display list of best deals here */}
-      <div className='border-2 border-black sm:mx-10 p-2 space-y-2'>
-        {itemsId.map(
-          (item)=>(<div key={item.position} className='border-2 border-black p-2'>
-            {item.item}
+      <div className='border-2 border-black sm:mx-10 p-2 space-y-2 rounded'>
+        {items.map(
+          (item)=>(<div key={item.position} className='border-2 border-black p-2 rounded bg-green-700 text-white text-2xl flex flex-row'>
+            {/* <p>Position: {item.position}Item:{item.item}</p> */}
+            <p>{getTitleById(item.item) || 'Not Found'}</p>
+            <div className='ml-auto'>
+
+              {Number(item.position)>1?
+              <ChevronUp/>
+            :""  
+            }
+
+            {Number(item.position)<items.length?
+            <ChevronDown/>
+          :""  
+          }
+            </div>
           </div>)
         )}
       </div>
