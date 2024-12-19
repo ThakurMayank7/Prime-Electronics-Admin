@@ -50,7 +50,6 @@ function Header() {
           Go to Home
         </Link>
       </div>
-      <br />
     </>
   );
 }
